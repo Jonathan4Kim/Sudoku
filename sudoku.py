@@ -8,11 +8,17 @@ class Sudoku:
         self.diff: stores the difficulty of sudoku game
         """
         self.board = board
-        self.sol = self.sol
+        self.sol = sol
         self.diff = diff
         self.rows = [set() for i in range(9)]
         self.cols = [set() for i in range(9)]
         self.boxes = [[set() for i in range(3)] for j in range(3)]
+
+    def getBoard(self):
+        return self.board
+
+    def getSol(self):
+        return self.sol
 
     def move(self, i, j, val):
         if self.isValidMove(i, j):
