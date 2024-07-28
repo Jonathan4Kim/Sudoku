@@ -16,23 +16,26 @@ class Sudoku:
 
     def getBoard(self):
         return self.board
+    
+    def getVal(self, i, j):
+        return self.board[i][j]
 
     def getSol(self):
         return self.sol
 
     def move(self, i, j, val):
-        if self.isValidMove(i, j):
+        if self.isValidMove(i, j, val):
             self.board[i][j] = val
             self.rows[i].add(val)
             self.cols[j].add(val)
-            self.boxes[i][j].add(val)
+            self.boxes[i // 3][j // 3].add(val)
 
     def remove(self, i, j, val):
         if val != 0:
             self.board[i][j] = 0
             self.rows[i].remove(val)
             self.cols[j].remove(val)
-            self.boxes[i][j].remove(val)
+            self.boxes[i // 3][j // 3].remove(val)
 
     def isValidMove(self, i, j, val):
         return (val not in self.rows[i] and
