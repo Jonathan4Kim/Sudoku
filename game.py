@@ -1,7 +1,6 @@
 from sudoku import Sudoku
 import pygame
 import requests
-from pygame.locals import QUIT, MOUSEWHEEL
 
 
 def createBoard():
@@ -39,7 +38,6 @@ class Game(object):
             self.screen: pygame display (1200x900 dimensions)
             self.clock: pygame clock
             self.color: black, good for initialization, text, and lines
-
             Will blit onto screen.
         Returns: None
         """
@@ -51,11 +49,16 @@ class Game(object):
 
         # fill screen with background and instantiate surface with same color
         self.screen.fill(color=pygame.Color(251, 255, 241))
-        self.surface = pygame.Surface((1200, 900))
-        self.surface.fill(color=pygame.Color(251, 255, 241))
+        self.surface = pygame.Surface((925, 925))
         # draw the grid and initial board and then blit grid onto screen
-        self.drawGrid()
+        self.drawSudoku()
+
+    def drawSudoku(self):
+        self.surface = pygame.Surface((925, 925))
+        self.surface.fill(color=pygame.Color(251, 255, 241))
+        self.drawSideBar()
         self.drawBoard()
+        self.drawGrid()
         self.screen.blit(self.surface, (0, 0))
         pygame.display.flip()
 
@@ -96,26 +99,77 @@ class Game(object):
         for i in range(9):
             for j in range(9):
                 val = font.render(str(board[i][j]), True, self.color)
-                self.screen.blit(val, (axis[i], axis[j]))
-        # display flip to see changes
-        pygame.display.flip()
+                self.surface.blit(val, (axis[i], axis[j]))
+
+    def drawSideBar(self):
+        surface = pygame.Surface((250, 900))
+        surface.fill(color=pygame.Color(251, 255, 241))
+        titleFont = pygame.font.Font(None, 100)
+        title = "Sudoku"
+        titleVal = titleFont.render(title, True, self.color)
+        self.screen.blit(titleVal, (900, 0))
+        # buttonFont = pygame.font.Font(None, 40)
 
     def playGame(self):
         """
-        Description: None
+        Description: Plays the python pygame.
+        Handles event types
         Args: None
         Returns: None
         """
-        while True:
+        running = True
+        mouse_clicked = False
+        x, y = -1, -1
+        while running:
+            if self.sudoku.win():
+                break
             for event in pygame.event.get():
-                if event.type == QUIT:
+                if event.type == pygame.QUIT:
+                    # turn running to False and quit game
+                    running = False
                     pygame.quit()
                     return
-                elif event.type == MOUSEWHEEL:
-                    pass
-                    # can access properties with
-                    # proper notation(ex: event.y) pygame.key.key_code()¶
-            self.drawBoard()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = pygame.mouse.get_pos()
+                    mouse_clicked = True
+                    # handle buttons here like save game, check game
+                elif (event.type == pygame.KEYDOWN
+                      and mouse_clicked):
+                    print("I'm here")
+                    print(x)
+                    print(y)
+                    if 0 <= x and x <= 900 and 0 <= y and y <= 900:
+                        # cast to the valid box
+                        x, y = x // 100, y // 100
+                    if event.key == pygame.K_1:
+                        self.sudoku.move(x, y, 1)
+                        self.drawSudoku()
+                    elif event.key == pygame.K_2:
+                        self.sudoku.move(x, y, 2)
+                        self.drawSudoku()
+                    elif event.key == pygame.K_3:
+                        self.sudoku.move(x, y, 3)
+                        self.drawSudoku()
+                    elif event.key == pygame.K_4:
+                        self.sudoku.move(x, y, 4)
+                        self.drawSudoku()
+                    elif event.key == pygame.K_5:
+                        self.sudoku.move(x, y, 5)
+                        self.drawSudoku()
+                    elif event.key == pygame.K_6:
+                        self.sudoku.move(x, y, 6)
+                        self.drawSudoku()
+                    elif event.key == pygame.K_7:
+                        self.sudoku.move(x, y, 7)
+                        self.drawSudoku()
+                    elif event.key == pygame.K_8:
+                        self.sudoku.move(x, y, 8)
+                        self.drawSudoku()
+                    elif event.key == pygame.K_9:
+                        self.sudoku.move(x, y, 9)
+                        self.drawSudoku()
+                    elif event.key == pygame.K_DELETE:
+                        self.sudoku.remove(x, y, self.sudoku.getVal(x, y))
             self.clock.tick(60)
 
 
