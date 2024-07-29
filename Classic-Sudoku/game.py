@@ -110,29 +110,46 @@ class Game(object):
         # iterate through, rendering the value and blitting to screen
         for i in range(9):
             for j in range(9):
+                if board[i][j] == 0:
+                    continue
                 if (i, j) in initial:
                     val = font.render(str(board[i][j]), True,
-                                      pygame.Color(0, 150, 0))
+                                      pygame.Color(1, 25, 120))
                     self.surface.blit(val, (axis[i], axis[j]))
                     continue
                 val = font.render(str(board[i][j]), True, self.color)
                 self.surface.blit(val, (axis[i], axis[j]))
 
     def drawSideBar(self):
+        # create surface for sidebar
         surface = pygame.Surface((250, 900))
         surface.fill(color=pygame.Color(251, 255, 241))
         titleFont = pygame.font.Font(None, 200)
+
+        # new game rendering
+        rect = pygame.Rect(950, 300, 450, 100)
+        pygame.draw.rect(self.screen, color=self.color, rect=rect, width=5)
+        newGameFont = pygame.font.Font(None, 75)
+        newGameVal = newGameFont.render("New Game", True, self.color)
+        self.screen.blit(newGameVal, (1025, 325))
+
+        # title rendering
         title = "Sudoku"
         titleVal = titleFont.render(title, True, self.color)
         self.screen.blit(titleVal, (915, 50))
+
+        # difficulty rendering
         diffFont = pygame.font.Font(None, 75)
         diffVal = diffFont.render("Difficulty: " + self.sudoku.getDiff(),
                                   True, self.color)
         self.screen.blit(diffVal, (950, 210))
+
+        # check for win condition/print you won!
         if self.sudoku.win():
-            self.screen.blit()
-        
-        # buttonFont = pygame.font.Font(None, 40)
+            winFont = pygame.font.Font(None, 100)
+            winVal = winFont.render("You won!", True,
+                                    pygame.color(0, 255, 0))
+            self.screen.blit(winVal, (950, 800))
 
     def playGame(self):
         """
@@ -144,19 +161,23 @@ class Game(object):
         running = True
         mouse_clicked = False
         while running:
+            # check for win upon each iteration
             if self.sudoku.win():
                 print("You won!")
                 break
+            # check pygame events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.KEYDOWN:
+                    # quit the game if we press escape
                     if event.key == pygame.K_ESCAPE:
                         running = False
+                    # full screen mode
                     elif event.key == pygame.K_F11:
                         self.toggle_fullscreen()
+                    # find where mouse was clicked, then fill number in
                     elif mouse_clicked:
-                        print("I'm here")
                         x, y = pygame.mouse.get_pos()
                         if 0 <= x <= 900 and 0 <= y <= 900:
                             x, y = x // 100, y // 100
@@ -166,18 +187,17 @@ class Game(object):
                                              pygame.K_7, pygame.K_8,
                                              pygame.K_9):
                                 self.sudoku.move(x, y, int(event.unicode))
-                                self.drawSudoku()
-                            elif event.key == pygame.K_DELETE:
-                                self.sudoku.remove(x, y,
-                                                   self.sudoku.getVal(x, y))
+                # another way to break fromt he game
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_MINUS:
                         running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
+                    # new game creation button
+                    if 950 <= x and x <= 1400 and 300 <= y and y <= 400:
+                        self.sudoku = createBoard()
                     mouse_clicked = True
-                    # handle buttons here like save game, check game
-
+            # redraw, fill screen, and reset display upon every iter
             self.screen.fill(pygame.Color(251, 255, 241))
             self.drawSudoku()
             pygame.display.flip()

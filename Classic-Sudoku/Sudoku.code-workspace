@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "Sudoku",
+			"path": ".."
+		},
+		{
+			"name": "sudoku-test",
+			"path": "../../../../Downloads/sudoku-test"
+		}
+	],
+	"settings": {}
+}

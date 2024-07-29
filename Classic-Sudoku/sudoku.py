@@ -85,7 +85,7 @@ class Sudoku:
             self.cols[j].add(val)
             self.boxes[i // 3][j // 3].add(val)
 
-    def remove(self, i, j, val):
+    def remove(self, i, j):
         """
         Description: Removes the value to the (i, j) coordinate in
         self.board, provided that:
@@ -95,7 +95,8 @@ class Sudoku:
         Args: i (row), j (col), val (value in question)
         Returns: None
         """
-        if val != 0 and (i, j) not in self.initial:
+        if self.board[i][j] != 0 and (i, j) not in self.initial:
+            val = self.board[i][j]
             self.board[i][j] = 0
             self.rows[i].remove(val)
             self.cols[j].remove(val)
