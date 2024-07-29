@@ -112,7 +112,7 @@ class Game(object):
             for j in range(9):
                 if (i, j) in initial:
                     val = font.render(str(board[i][j]), True,
-                                      pygame.Color(0, 150, 0))
+                                      pygame.Color(1, 25, 120))
                     self.surface.blit(val, (axis[i], axis[j]))
                     continue
                 val = font.render(str(board[i][j]), True, self.color)
@@ -130,8 +130,11 @@ class Game(object):
                                   True, self.color)
         self.screen.blit(diffVal, (950, 210))
         if self.sudoku.win():
-            self.screen.blit()
-        
+            winFont = pygame.font.Font(None, 100)
+            winVal = winFont.render("You won!", True,
+                                    pygame.color(0, 255, 0))
+            self.screen.blit(winVal, (950, 800))
+
         # buttonFont = pygame.font.Font(None, 40)
 
     def playGame(self):
