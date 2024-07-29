@@ -192,6 +192,8 @@ if __name__ == "__main__":
     pygame.init()
     # pygame display
     pygame.display.init()
+    # pygame caption
+    pygame.display.set_caption("Sudoku Game")
     # make the mouse visible
     pygame.mouse.set_visible(True)
     # create game instance
