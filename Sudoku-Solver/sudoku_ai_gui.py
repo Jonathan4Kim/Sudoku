@@ -36,7 +36,10 @@ class SudokuBoard(object):
             row = []
             for j in range(9):
                 ind = i * 9 + j
-                value = int(board_string[ind])
+                value = board_string[ind]
+                if value == '*':
+                    value = 0
+                value = int(value)
                 row.append(value)
             board.append(row)
         return board
@@ -276,7 +279,7 @@ class SudokuUI(Frame):
 
 
 if __name__ == '__main__':
-    game = SudokuGame('0043002090060043003508690042910300')
+    game = SudokuGame('821*****7***8***6**6*93***5**82*16*****7**28424*6*37**6*5***1*3*7**5****912*****6')
     game.start()
     root = Tk()
     SudokuUI(root, game)
