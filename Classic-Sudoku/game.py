@@ -119,16 +119,26 @@ class Game(object):
                 self.surface.blit(val, (axis[i], axis[j]))
 
     def drawSideBar(self):
+        # create surface for sidebar
         surface = pygame.Surface((250, 900))
         surface.fill(color=pygame.Color(251, 255, 241))
         titleFont = pygame.font.Font(None, 200)
+
+        # title rendering
         title = "Sudoku"
         titleVal = titleFont.render(title, True, self.color)
         self.screen.blit(titleVal, (915, 50))
         diffFont = pygame.font.Font(None, 75)
+
+        # difficulty rendering
         diffVal = diffFont.render("Difficulty: " + self.sudoku.getDiff(),
                                   True, self.color)
         self.screen.blit(diffVal, (950, 210))
+
+        # new game rendering
+
+
+        # check for win condition/print you won!
         if self.sudoku.win():
             winFont = pygame.font.Font(None, 100)
             winVal = winFont.render("You won!", True,
@@ -159,7 +169,6 @@ class Game(object):
                     elif event.key == pygame.K_F11:
                         self.toggle_fullscreen()
                     elif mouse_clicked:
-                        print("I'm here")
                         x, y = pygame.mouse.get_pos()
                         if 0 <= x <= 900 and 0 <= y <= 900:
                             x, y = x // 100, y // 100
@@ -170,9 +179,6 @@ class Game(object):
                                              pygame.K_9):
                                 self.sudoku.move(x, y, int(event.unicode))
                                 self.drawSudoku()
-                            elif event.key == pygame.K_DELETE:
-                                self.sudoku.remove(x, y,
-                                                   self.sudoku.getVal(x, y))
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_MINUS:
                         running = False
