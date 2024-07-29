@@ -13,25 +13,36 @@ class Sudoku:
         self.rows = [set() for i in range(9)]
         self.cols = [set() for i in range(9)]
         self.boxes = [[set() for i in range(3)] for j in range(3)]
+        self.initial = set()
+        for i in range(len(self.board)):
+            for j in range(len(self.board[0])):
+                if self.board[i][j] != 0:
+                    self.initial.add((i, j))
 
     def getBoard(self):
         return self.board
-    
+
     def getVal(self, i, j):
         return self.board[i][j]
+
+    def getDiff(self):
+        return self.diff
 
     def getSol(self):
         return self.sol
 
+    def getInitial(self):
+        return self.initial
+
     def move(self, i, j, val):
-        if self.isValidMove(i, j, val):
+        if self.isValidMove(i, j, val) and (i, j) not in self.initial:
             self.board[i][j] = val
             self.rows[i].add(val)
             self.cols[j].add(val)
             self.boxes[i // 3][j // 3].add(val)
 
     def remove(self, i, j, val):
-        if val != 0:
+        if val != 0 and (i, j) not in self.initial:
             self.board[i][j] = 0
             self.rows[i].remove(val)
             self.cols[j].remove(val)
@@ -43,6 +54,9 @@ class Sudoku:
                 val not in self.boxes[i // 3][j // 3])
 
     def isSolution(self):
+        """
+        Checks to see if a solution is met.
+        """
         return self.board == self.sol
 
     def win(self):
