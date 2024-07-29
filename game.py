@@ -56,10 +56,10 @@ class Game(object):
     def drawSudoku(self):
         self.surface = pygame.Surface((925, 925))
         self.surface.fill(color=pygame.Color(251, 255, 241))
-        self.drawSideBar()
         self.drawBoard()
         self.drawGrid()
         self.screen.blit(self.surface, (0, 0))
+        self.drawSideBar()
         pygame.display.flip()
 
     def drawGrid(self):
@@ -72,15 +72,25 @@ class Game(object):
 
         # Draw horizontal lines
         for val in values:
+            if val == 0 or val == 300 or val == 600:
+                pygame.draw.line(self.surface, (0, 0, 0), (0, val),
+                                 (900, val), width=5)
             pygame.draw.line(self.surface, (0, 0, 0), (0, val), (900, val))
 
         # Draw vertical lines
         for val in values:
+            if val == 0 or val == 300 or val == 600:
+                pygame.draw.line(self.surface, (0, 0, 0), (val, 0),
+                                 (val, 900), width=5)
             pygame.draw.line(self.surface, (0, 0, 0), (val, 0), (val, 900))
+        
+        # making sure 
 
         # Additional lines for the outer boundary if needed
-        pygame.draw.line(self.surface, (0, 0, 0), (0, 900), (900, 900))
-        pygame.draw.line(self.surface, (0, 0, 0), (900, 0), (900, 900))
+        pygame.draw.line(self.surface, (0, 0, 0), (0, 900), (900, 900),
+                         width=5)
+        pygame.draw.line(self.surface, (0, 0, 0), (900, 0), (900, 900),
+                         width=5)
 
     def drawBoard(self):
         """
@@ -122,6 +132,7 @@ class Game(object):
         x, y = -1, -1
         while running:
             if self.sudoku.win():
+                print("You won!")
                 break
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
